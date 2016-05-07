@@ -181,20 +181,41 @@ streznik.post('/izpisiRacunBaza', function(zahteva, odgovor) {
   });
 })
 
+var stranka = function(id,callback) {
+  pb.all("SELECT * FROM Customer WHERE CustomerId = " + id,
+    function(napaka, vrstice) {
+      callback(vrstice);
+    }
+  );
+}
+
+
 // Izpis računa v HTML predstavitvi ali izvorni XML obliki
 streznik.get('/izpisiRacun/:oblika', function(zahteva, odgovor) {
-  pesmiIzKosarice(zahteva, function(pesmi) {
-    if (!pesmi) {
-      odgovor.sendStatus(500);
-    } else if (pesmi.length == 0) {
-      odgovor.send("<p>V košarici nimate nobene pesmi, \
-        zato računa ni mogoče pripraviti!</p>");
-    } else {
-      odgovor.setHeader('content-type', 'text/xml');
-      odgovor.render('eslog', {
-        vizualiziraj: zahteva.params.oblika == 'html' ? true : false,
-        postavkeRacuna: pesmi
-      })  
+   var form = new formidable.IncomingForm();
+  form.parse(zahteva, function (napaka1, polja, datoteke) {
+    var napaka2 = false;
+    try {
+        stranka(zahteva.session.customer,function(res){
+          console.log(res);
+          pesmiIzKosarice(zahteva, function(pesmi) {
+            if (!pesmi) {
+              odgovor.sendStatus(500);
+            } else if (pesmi.length == 0) {
+              odgovor.send("<p>V košarici nimate nobene pesmi, \
+                zato računa ni mogoče pripraviti!</p>");
+            } else {
+              odgovor.setHeader('content-type', 'text/xml');
+              odgovor.render('eslog', {
+                vizualiziraj: zahteva.params.oblika == 'html' ? true : false,
+                postavkeRacuna: pesmi,
+                postavkeNarocnika: res
+              })  
+            }
+          })
+        })
+    } catch (err) {
+      napaka2 = true;
     }
   })
 })
