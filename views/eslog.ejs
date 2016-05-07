@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <% if (vizualiziraj) { %>
 <?xml-stylesheet type="text/xsl" href="../eSLOG/vizualizacija.xslt"?>
-<% } %>
+<% } %>
 <IzdaniRacunEnostavni xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xds="http://uri.etsi.org/01903/v1.1.1#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.gzs.si/e-poslovanje/sheme/eSLOG_1-6_EnostavniRacun.xsd">
 	<Racun Id="data">
 		<!-- verzija priročnika -->
@@ -169,23 +169,50 @@
 			</KontaktiPodjetja>
 		</PodatkiPodjetja>
 		<!-- naročnik -->
+		<%
+		
+			if(!postavkeNarocnika){
+				var partner =	"Univerza v Ljubljani," ; 
+				var partner2 = "Fakulteta za računalništvo in informatiko";
+				var ulica1 = "Večna pot";
+				var kraj = "Ljubljana";
+				var nazivDrzave = "Slovenija";
+				var postnaStevilka = "1000";
+				var komunikacijeTe = "38614798000";
+				var komunikacijeFx = "38612419350";
+				var imeOsebe = "Dejan Lavbič";
+			}else{
+				partner = postavkeNarocnika[0].FirstName+" "+postavkeNarocnika[0].LastName;
+				partner2 = postavkeNarocnika[0].Company;
+				ulica1 = postavkeNarocnika[0].Address;
+				kraj = postavkeNarocnika[0].City;
+				nazivDrzave = postavkeNarocnika[0].Country;
+				postnaStevilka = postavkeNarocnika[0].PostalCode;
+				komunikacijeTe = postavkeNarocnika[0].Phone;
+				komunikacijeFx = postavkeNarocnika[0].Fax;
+				imeOsebe = postavkeNarocnika[0].FirstName+" "+postavkeNarocnika[0].LastName+" ("+postavkeNarocnika[0].Email+")";
+			}
+		
+		
+		%>
+		
 		<PodatkiPodjetja>
 			<NazivNaslovPodjetja>
 				<VrstaPartnerja>BY</VrstaPartnerja>
 				<NazivPartnerja>
-					<NazivPartnerja1>Univerza v Ljubljani, </NazivPartnerja1>
-					<NazivPartnerja2>Fakulteta za računalništvo in informatiko</NazivPartnerja2>
+					<NazivPartnerja1><%= partner %></NazivPartnerja1>
+					<NazivPartnerja2><%= partner2 %></NazivPartnerja2>
 					<NazivPartnerja3>Laboratorij za </NazivPartnerja3>
 					<NazivPartnerja4>podatkovne tehnologije</NazivPartnerja4>
 				</NazivPartnerja>
 				<Ulica>
-					<Ulica1>Večna pot </Ulica1>
+					<Ulica1><%= ulica1 %></Ulica1>
 					<Ulica2>113</Ulica2>
 					<Ulica3>nadstropje 2, kabinet R2.49</Ulica3>
 				</Ulica>
-				<Kraj>Ljubljana</Kraj>
-				<NazivDrzave>Slovenija</NazivDrzave>
-				<PostnaStevilka>1000</PostnaStevilka>
+				<Kraj><%= kraj %></Kraj>
+				<NazivDrzave><%= nazivDrzave %></NazivDrzave>
+				<PostnaStevilka><%= postnaStevilka %></PostnaStevilka>
 				<KodaDrzave>SI</KodaDrzave>
 			</NazivNaslovPodjetja>
 			<FinancniPodatkiPodjetja>
@@ -210,14 +237,14 @@
 			</ReferencniPodatkiPodjetja>
 			<KontaktiPodjetja>
 				<KontaktnaOseba>
-					<ImeOsebe>Dejan Lavbič</ImeOsebe>
+					<ImeOsebe><%= imeOsebe %></ImeOsebe>
 				</KontaktnaOseba>
 				<Komunikacije>
-					<StevilkaKomunikacije>38614798000</StevilkaKomunikacije>
+					<StevilkaKomunikacije><%= komunikacijeTe %></StevilkaKomunikacije>
 					<VrstaKomunikacije>TE</VrstaKomunikacije>
 				</Komunikacije>
 				<Komunikacije>
-					<StevilkaKomunikacije>38612419350</StevilkaKomunikacije>
+					<StevilkaKomunikacije><%= komunikacijeFx %></StevilkaKomunikacije>
 					<VrstaKomunikacije>FX</VrstaKomunikacije>
 				</Komunikacije>
 			</KontaktiPodjetja>
